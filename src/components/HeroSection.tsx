@@ -1,29 +1,66 @@
 import { motion } from "framer-motion";
 import twineLogo from "@/assets/twine-logo.png";
-import mockupHome from "@/assets/mockup-home.png";
+import screenshotHome from "@/assets/screenshot-home.jpeg";
 
 const HeroSection = () => {
   return (
     <section className="relative min-h-screen flex items-center overflow-hidden" style={{ background: "var(--gradient-hero)" }}>
-      {/* Floating hearts background */}
+      {/* Animated gradient orbs */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden">
-        {[...Array(6)].map((_, i) => (
+        <motion.div
+          className="absolute w-[500px] h-[500px] rounded-full bg-primary/5 blur-[100px]"
+          style={{ top: "-10%", right: "-10%" }}
+          animate={{ scale: [1, 1.2, 1], opacity: [0.3, 0.5, 0.3] }}
+          transition={{ duration: 8, repeat: Infinity }}
+        />
+        <motion.div
+          className="absolute w-[400px] h-[400px] rounded-full bg-secondary/20 blur-[80px]"
+          style={{ bottom: "10%", left: "-5%" }}
+          animate={{ scale: [1.1, 0.9, 1.1], opacity: [0.2, 0.4, 0.2] }}
+          transition={{ duration: 10, repeat: Infinity }}
+        />
+        {[...Array(8)].map((_, i) => (
           <motion.div
             key={i}
-            className="absolute text-primary/10 text-4xl"
+            className="absolute text-primary/8 select-none"
             style={{
-              left: `${15 + i * 15}%`,
-              top: `${10 + (i % 3) * 30}%`,
+              left: `${8 + i * 12}%`,
+              top: `${5 + (i % 4) * 25}%`,
+              fontSize: `${20 + i * 4}px`,
             }}
-            animate={{ y: [-10, 10, -10], rotate: [0, 10, -10, 0] }}
-            transition={{ duration: 4 + i, repeat: Infinity, ease: "easeInOut" }}
+            animate={{ y: [-15, 15, -15], rotate: [0, 15, -15, 0] }}
+            transition={{ duration: 5 + i * 0.7, repeat: Infinity, ease: "easeInOut" }}
           >
             ♥
           </motion.div>
         ))}
       </div>
 
-      <div className="container mx-auto px-6 py-20 lg:py-0">
+      {/* Navbar */}
+      <nav className="absolute top-0 left-0 right-0 z-50">
+        <div className="container mx-auto px-6 py-5 flex items-center justify-between">
+          <div className="flex items-center gap-2.5">
+            <img src={twineLogo} alt="Twine logo" width={40} height={40} className="w-10 h-10" />
+            <span className="font-heading text-xl font-bold text-foreground">Twine</span>
+          </div>
+          <div className="hidden md:flex items-center gap-8 font-body text-sm font-medium text-muted-foreground">
+            <a href="#features" className="hover:text-primary transition-colors">Features</a>
+            <a href="#preview" className="hover:text-primary transition-colors">Preview</a>
+            <a href="#how-it-works" className="hover:text-primary transition-colors">How It Works</a>
+          </div>
+          <motion.a
+            href="#"
+            whileHover={{ scale: 1.04 }}
+            whileTap={{ scale: 0.97 }}
+            className="rounded-full bg-primary px-5 py-2 font-body text-sm font-semibold text-primary-foreground transition-shadow"
+            style={{ boxShadow: "var(--shadow-glow)" }}
+          >
+            Download
+          </motion.a>
+        </div>
+      </nav>
+
+      <div className="container mx-auto px-6 py-20 lg:py-0 pt-32">
         <div className="grid lg:grid-cols-2 gap-12 items-center">
           {/* Left: Text */}
           <motion.div
@@ -32,13 +69,25 @@ const HeroSection = () => {
             transition={{ duration: 0.8, ease: "easeOut" }}
             className="text-center lg:text-left"
           >
-            <div className="flex items-center gap-3 justify-center lg:justify-start mb-6">
-              <img src={twineLogo} alt="Twine logo" width={48} height={48} className="w-12 h-12" />
-              <span className="font-heading text-2xl font-bold text-foreground">Twine</span>
-            </div>
+            <motion.div
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ delay: 0.2 }}
+              className="inline-block px-4 py-1.5 rounded-full bg-primary/10 text-primary font-body text-sm font-semibold mb-6"
+            >
+              ✨ Now available on iOS & Android
+            </motion.div>
             <h1 className="font-heading text-4xl md:text-5xl lg:text-6xl font-extrabold text-foreground leading-tight mb-6">
               Stay Tethered,{" "}
-              <span className="text-primary">Every Day</span>
+              <span className="relative">
+                <span className="text-primary">Every Day</span>
+                <motion.span
+                  className="absolute -bottom-1 left-0 right-0 h-1 bg-primary/30 rounded-full"
+                  initial={{ scaleX: 0 }}
+                  animate={{ scaleX: 1 }}
+                  transition={{ delay: 0.8, duration: 0.6 }}
+                />
+              </span>
             </h1>
             <p className="font-body text-lg md:text-xl text-muted-foreground max-w-lg mx-auto lg:mx-0 mb-8 leading-relaxed">
               Daily games, real-time doodles, and intimate challenges to bring you closer — no matter the distance.
@@ -67,15 +116,22 @@ const HeroSection = () => {
               </motion.a>
             </div>
 
-            {/* QR Code placeholder */}
-            <div className="hidden lg:flex items-center gap-3 text-muted-foreground">
-              <div className="w-16 h-16 rounded-lg bg-foreground/5 border border-border flex items-center justify-center">
-                <svg className="w-8 h-8 text-foreground/30" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 4.875c0-.621.504-1.125 1.125-1.125h4.5c.621 0 1.125.504 1.125 1.125v4.5c0 .621-.504 1.125-1.125 1.125h-4.5A1.125 1.125 0 013.75 9.375v-4.5zM3.75 14.625c0-.621.504-1.125 1.125-1.125h4.5c.621 0 1.125.504 1.125 1.125v4.5c0 .621-.504 1.125-1.125 1.125h-4.5a1.125 1.125 0 01-1.125-1.125v-4.5zM13.5 4.875c0-.621.504-1.125 1.125-1.125h4.5c.621 0 1.125.504 1.125 1.125v4.5c0 .621-.504 1.125-1.125 1.125h-4.5A1.125 1.125 0 0113.5 9.375v-4.5z" />
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M6.75 6.75h.75v.75h-.75v-.75zM6.75 16.5h.75v.75h-.75v-.75zM16.5 6.75h.75v.75H16.5v-.75zM13.5 13.5h.75v.75h-.75v-.75zM13.5 19.5h.75v.75h-.75v-.75zM19.5 13.5h.75v.75h-.75v-.75zM19.5 19.5h.75v.75h-.75v-.75zM16.5 16.5h.75v.75H16.5v-.75z" />
-                </svg>
+            {/* Stats */}
+            <div className="flex items-center gap-8 justify-center lg:justify-start text-center">
+              <div>
+                <p className="font-heading text-2xl font-bold text-primary">10K+</p>
+                <p className="font-body text-xs text-muted-foreground">Active Couples</p>
               </div>
-              <span className="text-sm font-body">Scan to download</span>
+              <div className="w-px h-10 bg-border" />
+              <div>
+                <p className="font-heading text-2xl font-bold text-primary">4.8★</p>
+                <p className="font-body text-xs text-muted-foreground">App Rating</p>
+              </div>
+              <div className="w-px h-10 bg-border" />
+              <div>
+                <p className="font-heading text-2xl font-bold text-primary">1M+</p>
+                <p className="font-body text-xs text-muted-foreground">Doodles Sent</p>
+              </div>
             </div>
           </motion.div>
 
@@ -87,14 +143,22 @@ const HeroSection = () => {
             className="flex justify-center"
           >
             <div className="relative">
-              <div className="absolute -inset-8 rounded-full bg-primary/5 blur-3xl" />
-              <img
-                src={mockupHome}
-                alt="Twine app home screen"
-                width={400}
-                height={800}
-                className="relative w-[280px] md:w-[320px] lg:w-[360px] animate-float drop-shadow-2xl"
+              <motion.div
+                className="absolute -inset-12 rounded-full bg-primary/8 blur-3xl"
+                animate={{ scale: [1, 1.1, 1] }}
+                transition={{ duration: 6, repeat: Infinity }}
               />
+              {/* Phone frame */}
+              <div className="relative rounded-[2.8rem] overflow-hidden border-[4px] border-foreground/10 shadow-2xl"
+                style={{ boxShadow: "var(--shadow-glow), 0 30px 60px -15px rgba(0,0,0,0.2)" }}
+              >
+                <div className="absolute top-0 left-1/2 -translate-x-1/2 w-28 h-6 bg-foreground/90 rounded-b-2xl z-10" />
+                <img
+                  src={screenshotHome}
+                  alt="Twine app home screen"
+                  className="relative w-[280px] md:w-[300px] lg:w-[320px] h-auto animate-float"
+                />
+              </div>
             </div>
           </motion.div>
         </div>
